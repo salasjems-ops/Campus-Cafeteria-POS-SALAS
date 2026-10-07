@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Cafeteria POS - IT 415</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="pos-header">
+    <div class="brand">
+      <span class="brand-icon">🍽️</span>
+      <div>
+        <h1>Campus Cafeteria POS</h1>
+        <p class="subtitle">IT 415 Practical Exam &bull; Scenario 1</p>
+      </div>
+    </div>
+    <div class="header-info">
+      <div class="badge-status">
+        <span class="status-dot"></span> System Ready
+      </div>
+      <div id="live-datetime" class="live-datetime">--:--:--</div>
+    </div>
+  </header>
+
+  <!-- Main POS Workspace -->
+  <main class="pos-container">
+    <!-- Left Column: Product Catalog -->
+    <section class="products-section">
+      <div class="section-header">
+        <h2>Available Menu Items</h2>
+        <span class="section-note">Click any item or click 'Add to Cart'</span>
+      </div>
+
+      <div class="products-grid" id="products-grid">
+        <!-- Dynamically rendered via script.js -->
+      </div>
+    </section>
+
+    <!-- Right Column: Cart, Order Summary, and Checkout -->
+    <section class="cart-section">
+      <div class="section-header">
+        <h2>Current Order</h2>
+        <span id="cart-item-count" class="cart-count-badge">0 items</span>
+      </div>
+
+      <!-- Cart Items Table / List -->
+      <div class="cart-table-wrapper">
+        <table class="cart-table" id="cart-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th class="text-right">Price</th>
+              <th class="text-center">Qty</th>
+              <th class="text-right">Subtotal</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="cart-body">
+            <!-- Dynamically populated or empty state shown via script.js -->
+          </tbody>
+        </table>
+
+        <!-- Empty Cart Notice -->
+        <div id="empty-cart-state" class="empty-cart">
+          <span class="empty-icon">🛒</span>
+          <p>No items added yet</p>
+          <small>Select food or drinks from the menu</small>
+        </div>
+      </div>
+
+      <!-- Order Totals Box -->
+      <div class="totals-card">
+        <div class="totals-row">
+          <span>Total Items:</span>
+          <strong id="total-qty-display">0</strong>
+        </div>
+        <div class="totals-row total-highlight">
+          <span>Total Amount:</span>
+          <span class="total-price" id="total-amount-display">₱0.00</span>
+        </div>
+      </div>
+
+      <!-- Cash Payment Form -->
+      <div class="payment-card">
+        <h3>Cash Payment</h3>
+        
+        <div class="form-group">
+          <label for="cash-input">Enter Cash Received (₱):</label>
+          <div class="cash-input-wrap">
+            <span class="currency-prefix">₱</span>
+            <input 
+              type="number" 
+              id="cash-input" 
+              placeholder="0.00" 
+              step="0.01" 
+              min="0"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- Quick Cash Bill Presets -->
+        <div class="quick-cash-row">
+          <button type="button" class="btn-quick-cash" data-amount="exact">Exact</button>
+          <button type="button" class="btn-quick-cash" data-amount="50">₱50</button>
+          <button type="button" class="btn-quick-cash" data-amount="100">₱100</button>
+          <button type="button" class="btn-quick-cash" data-amount="200">₱200</button>
+          <button type="button" class="btn-quick-cash" data-amount="500">₱500</button>
+          <button type="button" class="btn-quick-cash" data-amount="1000">₱1000</button>
+        </div>
+
+        <!-- Validation Error Message Area -->
+        <div id="payment-error" class="payment-error hidden" role="alert"></div>
+
+        <!-- Payment Actions -->
+        <div class="payment-actions">
+          <button type="button" id="btn-pay" class="btn btn-primary">
+            ✓ Process Payment & Receipt
+          </button>
+          <button type="button" id="btn-clear-cart" class="btn btn-outline-danger">
+            ✕ Clear Cart
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Digital Receipt Modal -->
+  <div id="receipt-modal" class="modal-backdrop hidden">
+    <div class="modal-dialog">
+      <!-- Receipt Paper Card -->
+      <div class="receipt-paper" id="receipt-content">
+        <div class="receipt-header">
+          <div class="receipt-logo">🍽️</div>
+          <h3>CAMPUS CAFETERIA</h3>
+          <p class="receipt-sub">Student Activity Center, Building A</p>
+          <p class="receipt-sub">Official Order Slip</p>
+          <div class="receipt-divider-dashed"></div>
+        </div>
+
+        <div class="receipt-meta">
+          <div><strong>Transaction No:</strong> <span id="receipt-txn-no">TXN-0000</span></div>
+          <div><strong>Date & Time:</strong> <span id="receipt-datetime">--</span></div>
+          <div><strong>Cashier:</strong> <span>Station #01</span></div>
+        </div>
+
+        <div class="receipt-divider-dashed"></div>
+
+        <!-- Receipt Line Items -->
+        <table class="receipt-table">
+          <thead>
+            <tr>
+              <th class="text-left">Item</th>
+              <th class="text-center">Qty</th>
+              <th class="text-right">Price</th>
+              <th class="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody id="receipt-items-body">
+            <!-- Populated via script.js -->
+          </tbody>
+        </table>
+
+        <div class="receipt-divider-dashed"></div>
+
+        <!-- Receipt Calculation Summary -->
+        <div class="receipt-summary">
+          <div class="receipt-line">
+            <span>Total Amount Due:</span>
+            <strong id="receipt-total-amount">₱0.00</strong>
+          </div>
+          <div class="receipt-line">
+            <span>Cash Tendered:</span>
+            <span id="receipt-cash-paid">₱0.00</span>
+          </div>
+          <div class="receipt-line receipt-change-highlight">
+            <span>Change:</span>
+            <strong id="receipt-change">₱0.00</strong>
+          </div>
+        </div>
+
+        <div class="receipt-divider-dashed"></div>
+
+        <div class="receipt-footer">
+          <p class="receipt-thanks">Thank you for dining with us!</p>
+          <p class="receipt-note">Please present this receipt at the food counter.</p>
+          <div class="receipt-barcode">||| | ||||| || |||||| | ||| ||</div>
+        </div>
+      </div>
+
+      <!-- Modal Action Buttons (Not printed) -->
+      <div class="modal-actions">
+        <button type="button" id="btn-new-transaction" class="btn btn-success">
+          ➕ Start New Transaction
+        </button>
+        <button type="button" id="btn-print-receipt" class="btn btn-secondary">
+          🖨️ Print Receipt
+        </button>
+        <button type="button" id="btn-close-modal" class="btn btn-outline">
+          Close Preview
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

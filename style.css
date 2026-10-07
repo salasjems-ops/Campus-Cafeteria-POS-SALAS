@@ -1,0 +1,843 @@
+/* ==========================================================================
+   Campus Cafeteria POS - Stylesheet (style.css)
+   Designed for IT 415 Practical Examination (Desktop & Laptop Optimized)
+   ========================================================================== */
+
+/* 1. Global Reset & CSS Custom Properties (Theme Variables) */
+:root {
+  --primary-color: #0f766e;        /* Deep Teal */
+  --primary-hover: #115e59;
+  --primary-light: #ccfbf1;
+  --accent-color: #f59e0b;         /* Warm Amber */
+  --accent-hover: #d97706;
+  --success-color: #16a34a;        /* Green */
+  --success-hover: #15803d;
+  --danger-color: #dc2626;         /* Red */
+  --danger-hover: #b91c1c;
+  --danger-light: #fee2e2;
+
+  --bg-body: #f1f5f9;              /* Slate Light */
+  --bg-card: #ffffff;
+  --text-main: #0f172a;            /* Dark Slate */
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --border-focus: #0f766e;
+
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-receipt: "Courier New", Courier, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2. Top Header */
+.pos-header {
+  background-color: #ffffff;
+  border-bottom: 2px solid var(--border-color);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-icon {
+  font-size: 2.2rem;
+  background-color: var(--primary-light);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.brand h1 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.brand .subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.badge-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #a7f3d0;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--success-color);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+}
+
+.live-datetime {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 3. Main Workspace Layout */
+.pos-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 22px;
+  padding: 22px 28px;
+  max-width: 1500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 4. Left Column: Product Catalog */
+.products-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.section-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.product-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+.product-card:active {
+  transform: translateY(0);
+}
+
+.product-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.product-icon {
+  font-size: 2.2rem;
+  background-color: #f8fafc;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: 1px solid #e2e8f0;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.product-category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.product-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.btn-add-item {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn-add-item:hover {
+  background-color: var(--primary-hover);
+}
+
+/* 5. Right Column: Cart, Totals & Payment */
+.cart-section {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.cart-count-badge {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* Cart Table */
+.cart-table-wrapper {
+  flex: 1;
+  min-height: 180px;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  background-color: #fafaf9;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.cart-table th {
+  background-color: #f1f5f9;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cart-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: #ffffff;
+  vertical-align: middle;
+}
+
+.cart-table tr:last-child td {
+  border-bottom: none;
+}
+
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+/* Quantity Buttons */
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.btn-qty {
+  background: #f8fafc;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.btn-qty:hover {
+  background: #e2e8f0;
+}
+
+.qty-val {
+  min-width: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.btn-remove-item {
+  background: transparent;
+  border: 1px solid #fecaca;
+  color: var(--danger-color);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.btn-remove-item:hover {
+  background-color: var(--danger-color);
+  color: #ffffff;
+}
+
+/* Empty State */
+.empty-cart {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-cart.hidden {
+  display: none;
+}
+
+.empty-icon {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.empty-cart p {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+
+/* Order Totals */
+.totals-card {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.totals-row.total-highlight {
+  margin-bottom: 0;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color);
+  color: var(--text-main);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.total-price {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+/* Payment Form */
+.payment-card {
+  border-top: 2px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.payment-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-main);
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.cash-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-prefix {
+  position: absolute;
+  left: 14px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.cash-input-wrap input {
+  width: 100%;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 10px 14px 10px 36px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  color: var(--text-main);
+}
+
+.cash-input-wrap input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+
+.cash-input-wrap input.input-error {
+  border-color: var(--danger-color);
+  background-color: #fffaf0;
+}
+
+/* Quick Cash Presets */
+.quick-cash-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.btn-quick-cash {
+  background-color: #f1f5f9;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 7px 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn-quick-cash:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Error Message Area */
+.payment-error {
+  background-color: var(--danger-light);
+  color: var(--danger-color);
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payment-error.hidden {
+  display: none;
+}
+
+/* Buttons */
+.payment-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s, box-shadow 0.15s;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  flex: 1;
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 10px rgba(15, 118, 110, 0.25);
+}
+
+.btn-outline-danger {
+  background-color: transparent;
+  color: var(--danger-color);
+  border: 1.5px solid var(--danger-color);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--danger-color);
+  color: #ffffff;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: var(--success-hover);
+}
+
+.btn-secondary {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background-color: #1e293b;
+}
+
+.btn-outline {
+  background-color: #e2e8f0;
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background-color: #cbd5e1;
+}
+
+/* 6. Modal / Receipt Overlay */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.modal-backdrop.hidden {
+  display: none;
+}
+
+.modal-dialog {
+  background: transparent;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Digital Receipt Paper Look */
+.receipt-paper {
+  background-color: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 24px 22px;
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-receipt);
+  color: #1e293b;
+  position: relative;
+}
+
+/* Decorative jagged edges or classic thermal feel */
+.receipt-paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, #0f766e 0, #0f766e 8px, #ffffff 8px, #ffffff 16px);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.receipt-logo {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.receipt-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.receipt-sub {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+.receipt-divider-dashed {
+  border-top: 1.5px dashed #94a3b8;
+  margin: 12px 0;
+}
+
+.receipt-meta {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.receipt-meta div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.receipt-table th {
+  padding: 4px 0;
+  font-weight: 700;
+  border-bottom: 1px dashed #94a3b8;
+  color: #334155;
+}
+
+.receipt-table td {
+  padding: 6px 0;
+  vertical-align: top;
+}
+
+.receipt-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.85rem;
+}
+
+.receipt-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receipt-change-highlight {
+  font-size: 1rem;
+  font-weight: 800;
+  background-color: #f0fdf4;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: #166534;
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  padding-top: 4px;
+}
+
+.receipt-thanks {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.receipt-note {
+  margin-bottom: 8px;
+}
+
+.receipt-barcode {
+  letter-spacing: 3px;
+  font-family: var(--font-receipt);
+  font-weight: 900;
+  opacity: 0.55;
+  font-size: 0.9rem;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 7. Print Media Query for Receipts */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #receipt-modal,
+  #receipt-modal * {
+    visibility: visible;
+  }
+
+  #receipt-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+  }
+
+  .modal-actions {
+    display: none !important;
+  }
+
+  .receipt-paper {
+    box-shadow: none;
+    border: 1px solid #000000;
+    width: 320px;
+    margin: 0 auto;
+  }
+}
+
+/* 8. Desktop / Tablet Responsive Adjustments */
+@media (max-width: 960px) {
+  .pos-container {
+    grid-template-columns: 1fr;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
